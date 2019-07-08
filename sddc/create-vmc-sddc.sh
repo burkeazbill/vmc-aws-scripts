@@ -1,7 +1,7 @@
 #!/bin/bash
 # Burke Azbill
 # Date: 2019-07-05
-# Purpose: This script will create an SDDC in the Org Specified
+# Purpose: This script will create one or more SDDCs in the Org Specified
 clear
 # Requirements:
 # - VMware Cloud on AWS Account
@@ -92,6 +92,8 @@ for i in $(seq -f "%02g" 1 ${QTY})
   do
   if [ ${QTY} -gt 1 ]; then
     SDDCFULLNAME=${SDDCNAME}${i}
+  else
+    SDDCFULLNAME=${SDDCNAME}
   fi
   # Prepare params:
   PARAMS="{\"name\": \"${SDDCFULLNAME}\",\"num_hosts\": ${HOSTCOUNT},\"provider\": \"${PROVIDER}\",\"region\": \"${REGION}\"}"

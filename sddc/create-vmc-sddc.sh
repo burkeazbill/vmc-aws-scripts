@@ -99,8 +99,16 @@ for i in $(seq -f "%02g" 1 ${QTY})
   PARAMS="{\"name\": \"${SDDCFULLNAME}\",\"num_hosts\": ${HOSTCOUNT},\"provider\": \"${PROVIDER}\",\"region\": \"${REGION}\"}"
   # echo ${PARAMS}
   echo "Creating SDDC: ${SDDCFULLNAME}"
-  curl -s -X POST https://vmc.vmware.com/vmc/api/orgs/${ORGID}/sddcs -H 'Content-Type: application/json' -H "csp-auth-token: ${CSP_ACCESS_TOKEN}" -d "${PARAMS}" -o ${SDDCFULLNAME}-task.json
+  TASKFILE=${SDDCFULLNAME}-task.json
+  curl -s -X POST https://vmc.vmware.com/vmc/api/orgs/${ORGID}/sddcs -H 'Content-Type: application/json' -H "csp-auth-token: ${CSP_ACCESS_TOKEN}" -d "${PARAMS}" -o ${TASKFILE}
   sleep 5
+  ERROR_MESSAGE=$(jq -r .error_messages ${TASKFILE})
+  RESOURCE_ID=$(jq -r .resource_id ${TASKFILE})
+  if [[ "${#RESOURCE_ID}" -gt 4 ]]; then
+    echo "SDDC ID: "${RESOURCE_ID}
+  else
+    echo "Error: "${ERROR_MESSAGE}
+  fi
 done
 ELAPSED="Elapsed: $(($SECONDS / 3600))hrs $((($SECONDS / 60) % 60))min $(($SECONDS % 60))sec"
 echo ""

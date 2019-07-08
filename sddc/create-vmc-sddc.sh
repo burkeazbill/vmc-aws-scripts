@@ -105,9 +105,9 @@ for i in $(seq -f "%02g" 1 ${QTY})
   ERROR_MESSAGE=$(jq -r .error_messages ${TASKFILE})
   RESOURCE_ID=$(jq -r .resource_id ${TASKFILE})
   if [[ "${#RESOURCE_ID}" -gt 4 ]]; then
-    echo "SDDC ID: "${RESOURCE_ID}
+    echo "Success! New SDDC ID: "${RESOURCE_ID}
   else
-    echo "Error: "${ERROR_MESSAGE}
+    echo "Error! : "${ERROR_MESSAGE}
   fi
 done
 ELAPSED="Elapsed: $(($SECONDS / 3600))hrs $((($SECONDS / 60) % 60))min $(($SECONDS % 60))sec"

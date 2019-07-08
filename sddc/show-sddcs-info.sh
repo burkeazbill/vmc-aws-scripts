@@ -6,7 +6,37 @@
 #
 # Tags: jq process array
 # Helpful URL: https://starkandwayne.com/blog/bash-for-loop-over-json-array-using-jq/
-OUTFILE="SDDCS_INFO.json"
+# Make sure that an SDDC ID has been provided:
+if [ ${#} -eq 1 ]; then
+    if [[ "$1" =~ ("?"|"HELP"|"help")$ ]]; then
+      echo -e "Usage: \n  $0 [OUTFILE]"
+      exit 1
+    elif test -f "$1"; then
+      OUTFILE=$1
+    else
+      echo "The specified file: $1 not found"
+      exit 1
+    fi
+else
+  # Default to the SDDCS_INFO.json if no file was specified
+  if test -f "SDDCS_INFO.json"; then
+    OUTFILE="SDDCS_INFO.json"
+  else
+    echo "The specified file: SDDCS_INFO.json not found"
+    exit 1
+  fi
+fi
+
+
+# Confirm that the "jq" CLI is available
+type jq > /dev/null 2>&1
+if [ $? -eq 1 ]; then
+    echo "It does not look like you have jq installed. This script uses jq to parse the JSON output"
+    echo "Please install jq https://stedolan.github.io/jq/ in order to proceed"
+    exit 1
+    # else
+    # echo "jq was found!"
+fi
 
 for row in $(cat ${OUTFILE} | jq -r '.[] | @base64'); do
   _jq() {

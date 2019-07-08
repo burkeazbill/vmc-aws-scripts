@@ -1,7 +1,7 @@
 #!/bin/bash
 # Burke Azbill
 # Date: 2019-07-05
-# Purpose: This script will create an SDDC in the Org Specified
+# Purpose: This script will create one or more SDDCs in the Org Specified
 clear
 # Requirements:
 # - VMware Cloud on AWS Account

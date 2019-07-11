@@ -6,7 +6,9 @@
 #
 # Tags: jq process array
 # Helpful URL: https://starkandwayne.com/blog/bash-for-loop-over-json-array-using-jq/
-# Make sure that an SDDC ID has been provided:
+source ../utils/common_functions.sh
+
+# Provide Help and option to specify a file to process:
 if [ ${#} -eq 1 ]; then
     if [[ "$1" =~ ("?"|"HELP"|"help")$ ]]; then
       echo -e "Usage: \n  $0 [OUTFILE]"
@@ -27,16 +29,8 @@ else
   fi
 fi
 
-
-# Confirm that the "jq" CLI is available
-type jq > /dev/null 2>&1
-if [ $? -eq 1 ]; then
-    echo "It does not look like you have jq installed. This script uses jq to parse the JSON output"
-    echo "Please install jq https://stedolan.github.io/jq/ in order to proceed"
-    exit 1
-    # else
-    # echo "jq was found!"
-fi
+# From common_functions.sh
+check-jq
 
 for row in $(cat ${OUTFILE} | jq -r '.[] | @base64'); do
   _jq() {
@@ -74,3 +68,6 @@ NSXT: ${NSXT}
 VPC_VGW: ${VPC_VGW}
 EOF
 done
+
+# From common-functions.sh
+displayElapsedScriptTime
